@@ -2,24 +2,28 @@
   <div class="boggle">
     <h1>vue boggle</h1>
 
-    <div class="timer">{{ minutes }}:{{ seconds | twoDigits }} ~ {{ counter }}</div>
+    <timer v-bind:startTime="this.roundStart"
+           v-bind:roundLength="this.roundLength">
+    </timer>
 
     <div class="board">
       <div v-for="item in tiles" class="tile">
-        <span v-if="counter > 0">{{ visibleSide(item) }}</span>
+        <span v-if="showTiles">{{ visibleSide(item) }}</span>
       </div>
     </div>
 
-    <button @click="shuffleTiles(); resetTimer()" class="shake">SHAKE</button>
+    <button @click="startGame" class="shake">SHAKE</button>
 
   </div>
 </template>
 
 <script>
   import _ from 'lodash'
+  import timer from './timer'
 
   export default {
     name: 'boggle',
+    components: { timer },
     data() {
       return {
         // copied from a 1992 edition of boggle I found at goodwill
@@ -41,53 +45,26 @@
           ['L', 'R', 'T', 'Y', 'E', 'T'],
           ['C', 'M', 'U', 'T', 'O', 'I'],
         ],
-        // timer is done by default, letters hide at 0
-        counter: 0,
-        timerObj: null,
+        showTiles: false,
+        roundStart: null,
+        roundLength: 180
       }
     },
-    computed: {
-      seconds() {
-        return Math.trunc(this.counter % 60);
-      },
-      minutes() {
-        return Math.trunc(this.counter / 60);
-      },
-    },
     methods: {
-      visibleSide(item) {
-        return _.sample(item);
-      },
+      // randomize array of tiles
       shuffleTiles() {
         this.tiles = _.shuffle(this.tiles);
       },
-      resetTimer() {
-        this.counter = 180;
-        this.startCountdown();
+      // pick random side from given tile
+      visibleSide(item) {
+        return _.sample(item);
       },
-      startCountdown() {
-        this.timerObj = window.setInterval(this.timerTick, 1000);
-      },
-      stopTimer() {
-        window.clearInterval(this.timerObj);
-      },
-      timerTick(){
-        if (this.counter > 0) {
-          this.counter -= 1;
-        } else {
-          this.stopTimer();
-          alert('timer done!');
-        }
+      startGame() {
+        this.shuffleTiles();
+        this.showTiles = true;
+        this.roundStart = Math.trunc((Date.now()) / 1000);
       },
     },
-    filters: {
-      twoDigits: function (value) {
-        if (value.toString().length <= 1) {
-          return '0' + value.toString();
-        }
-        return value.toString();
-      }
-    }
   }
 </script>
 
@@ -132,12 +109,6 @@
     background: mintcream;
     color: black;
     font-size: 60px;
-  }
-
-  /* time counter */
-  .timer {
-    margin: 25px;
-    font-size: 25px;
   }
 
   /* reset button */

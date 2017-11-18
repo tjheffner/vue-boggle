@@ -6,11 +6,13 @@
 
 <script>
 import boggle from './components/boggle'
+import timer from './components/timer'
 
 export default {
   name: 'app',
   components: {
-    boggle
+    boggle,
+    timer
   }
 }
 </script>
