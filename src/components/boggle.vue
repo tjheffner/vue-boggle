@@ -3,12 +3,13 @@
     <h1>vue boggle</h1>
 
     <timer v-bind:startTime="this.roundStart"
-           v-bind:roundLength="this.roundLength">
+           v-bind:roundLength="this.roundLength"
+           v-bind:roundNumber="this.roundNumber">
     </timer>
 
     <div class="board">
       <div v-for="item in tiles" class="tile">
-        <span v-if="showTiles">{{ visibleSide(item) }}</span>
+        <span v-if="showTiles" v-on:hide="hideTiles">{{ visibleSide(item) }}</span>
       </div>
     </div>
 
@@ -47,7 +48,8 @@
         ],
         showTiles: false,
         roundStart: null,
-        roundLength: 180
+        roundLength: 10,
+        roundNumber: 1
       }
     },
     methods: {
@@ -63,7 +65,11 @@
         this.shuffleTiles();
         this.showTiles = true;
         this.roundStart = Math.trunc((Date.now()) / 1000);
+        this.roundNumber++;
       },
+      hideTiles() {
+        this.showTiles = false;
+      }
     },
   }
 </script>
