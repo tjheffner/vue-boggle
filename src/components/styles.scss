@@ -1,0 +1,126 @@
+/* theme vars */
+@import url('https://fonts.googleapis.com/css?family=Boogaloo');
+
+$background-color: #FFF1D0;
+$board-color: #009DDC;
+$border-color: #F0C808;
+$other-color: #009B72;
+
+$font-family: 'Boogaloo', sans-serif;
+
+
+$border-radius: 15px;
+$mobile-spacing: 5px;
+$spacing: 10px;
+$bp--large: 670px;
+
+@mixin desktop() {
+  @media (min-width: 900px) { @content; }
+}
+
+body {
+  background: $background-color;
+  margin: 0 auto;
+  max-width: 550px;
+  font-family: $font-family;
+}
+
+/* overall container */
+.boggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    color: $other-color;
+    text-align: center;
+  }
+}
+
+/* wrapper around tiles */
+.board {
+  background: $board-color;
+  border-radius: $border-radius + 20;
+  border: 8px solid $border-color;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  width: 335px;
+
+  @include desktop() {
+    width: 100%;
+  }
+}
+/* individual tile */
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 60px;
+  border-radius: $border-radius;
+  background: lighten($other-color, 65%);
+
+  height: 70px;
+  width: 70px;
+  margin: $mobile-spacing;
+
+  @include desktop() {
+    height: 100px;
+    width: 100px;
+    margin: $spacing;
+  }
+}
+
+/* wrapper around timer + button */
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* reset button */
+.shake {
+  color: $border-color;
+  background: $board-color;
+  border: 4px solid $border-color;
+  border-radius: $border-radius;
+  height: 100px;
+  width: 200px;
+  font-family: $font-family;
+  font-size: 60px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.stats {
+  color: black;
+}
+
+/* timeWarning applied class */
+.red {
+  color: red;
+}
+
+.round {
+  font-size: 36px;
+  margin: 0;
+
+  span {
+    color: $other-color;
+  }
+}
+
+.timer {
+  font-size: 72px;
+  margin: 0;
+}
+

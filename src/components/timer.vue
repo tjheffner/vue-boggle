@@ -1,7 +1,9 @@
 <template>
-  <div class="timer">
-    <p>round: {{ roundNumber }}</p>
-    <p>{{ timeLeft | parseTime }}</p>
+  <div class="stats">
+    <p class="round">round: <span>{{ roundNumber }}</span></p>
+    <p class="timer"
+       v-if="startTime"
+       v-bind:class="{ red: timeWarning }"> {{ timeLeft | parseTime }}</p>
   </div>
 </template>
 
@@ -14,6 +16,7 @@
         now: null,
         interval: null,
         timeLeft: 0,
+        timeWarning: false
       }
     },
     mounted() {
@@ -32,10 +35,17 @@
       // watch current time changes, update time left to match
       now: function() {
         this.timeLeft = ((this.startTime + this.roundLength) - this.now);
+        this.timeWarning = false;
 
-        if (this.timeLeft < 0) {
+        // make the time left red
+        if (this.timeLeft <= 30) {
+          this.timeWarning = true;
+        }
+
+        // hide the tiles if the round is over
+        if (this.timeLeft <= 0) {
           this.timeLeft = 0;
-          this.$emit('hide');
+          this.$emit('hide', false);
         }
       }
     },
@@ -43,17 +53,23 @@
       clearInterval(this.interval);
     },
     filters: {
-      // format seconds to 00:00
+      // format timeLeft to 00:00
       parseTime: function(value) {
-        return value;
+
+        let minutes = Math.trunc(value / 60);
+        let seconds = value % 60;
+
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+
+        const newValue = minutes + ':' + seconds;
+        return newValue;
       }
     }
   }
 </script>
-
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>

@@ -1,19 +1,22 @@
 <template>
   <div class="boggle">
-    <h1>vue boggle</h1>
-
-    <timer v-bind:startTime="this.roundStart"
-           v-bind:roundLength="this.roundLength"
-           v-bind:roundNumber="this.roundNumber">
-    </timer>
+    <h1>boggle</h1>
 
     <div class="board">
       <div v-for="item in tiles" class="tile">
-        <span v-if="showTiles" v-on:hide="hideTiles">{{ visibleSide(item) }}</span>
+        <span v-if="showTiles">{{ visibleSide(item) }}</span>
       </div>
     </div>
 
-    <button @click="startGame" class="shake">SHAKE</button>
+    <div class="controls">
+      <timer v-bind:startTime="this.roundStart"
+             v-bind:roundLength="this.roundLength"
+             v-bind:roundNumber="this.roundNumber"
+             v-on:hide="hideTiles">
+      </timer>
+
+      <button @click="startGame" class="shake">SHAKE</button>
+    </div>
 
   </div>
 </template>
@@ -48,8 +51,8 @@
         ],
         showTiles: false,
         roundStart: null,
-        roundLength: 10,
-        roundNumber: 1
+        roundLength: 180,
+        roundNumber: 0
       }
     },
     methods: {
@@ -67,6 +70,7 @@
         this.roundStart = Math.trunc((Date.now()) / 1000);
         this.roundNumber++;
       },
+      // acts on 'hide' event emitted from timer.vue
       hideTiles() {
         this.showTiles = false;
       }
@@ -74,58 +78,6 @@
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-
-  /* overall container */
-  .boggle {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0 auto;
-    font-family: sans-serif;
-    font-weight: bold;
-    height: 100%;
-    background: mintcream;
-  }
-
-  /* wrapper around tiles */
-  .board {
-    background: dodgerblue;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    width: 550px;
-    border-radius: 15px;
-    border: 10px solid hotpink;
-  }
-  /* individual tile */
-  .tile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-    width: 100px;
-    margin: 15px;
-    border-radius: 15px;
-    background: mintcream;
-    color: black;
-    font-size: 60px;
-  }
-
-  /* reset button */
-  .shake {
-    margin: 50px;
-    height: 100px;
-    width: 25%;
-    color: hotpink;
-    background: dodgerblue;
-    border: 4px solid hotpink;
-    border-radius: 15px;
-    font-size: 48px;
-  }
+<style lang="scss">
+  @import './styles.scss';
 </style>
